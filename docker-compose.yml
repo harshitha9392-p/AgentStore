@@ -1,0 +1,84 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: agentstore_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: agentstore
+      POSTGRES_PASSWORD: agentstore_pass
+      POSTGRES_DB: agentstore_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agentstore -d agentstore_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: agentstore_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: agentstore_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      APP_NAME: "AgentStore"
+      APP_ENV: "production"
+      DATABASE_URL: "postgresql+asyncpg://agentstore:agentstore_pass@postgres:5432/agentstore_db"
+      REDIS_URL: "redis://redis:6379/0"
+      RAZORPAY_KEY_ID: "${RAZORPAY_KEY_ID:-rzp_test_buildathon2026mock}"
+      RAZORPAY_KEY_SECRET: "${RAZORPAY_KEY_SECRET:-buildathon_secret_key_mock_9918273645}"
+      RAZORPAY_WEBHOOK_SECRET: "${RAZORPAY_WEBHOOK_SECRET:-rzp_webhook_secret_buildathon_mock}"
+      RAZORPAY_MOCK_MODE: "${RAZORPAY_MOCK_MODE:-true}"
+      AGENT_PROVIDER: "${AGENT_PROVIDER:-mock}"
+      GEMINI_API_KEY: "${GEMINI_API_KEY:-}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      POLICY_MAX_ORDER_VALUE: "50000.00"
+      POLICY_MAX_DISCOUNT_PERCENTAGE: "25.0"
+      POLICY_HITL_THRESHOLD: "10000.00"
+    volumes:
+      - ./backend:/app/backend
+      - ./demo:/app/demo
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: agentstore_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000/api/v1
+
+volumes:
+  postgres_data:
+  redis_data:

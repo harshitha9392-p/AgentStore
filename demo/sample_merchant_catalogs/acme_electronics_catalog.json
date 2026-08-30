@@ -1,0 +1,32 @@
+{
+  "merchant_name": "Acme Electronics",
+  "currency": "INR",
+  "products": [
+    {
+      "sku": "ACME-4K-MONITOR",
+      "name": "Acme UltraVision 27\" 4K HDR Monitor",
+      "category_slug": "accessories",
+      "category_name": "Monitors & Displays",
+      "description": "27-inch 4K UHD IPS display with 99% sRGB color gamut and 65W USB-C Power Delivery.",
+      "brand": "Acme",
+      "base_price": 28990.00,
+      "compare_at_price": 34990.00,
+      "stock_quantity": 15,
+      "tags": ["monitor", "4k", "display", "usb-c", "hdr"],
+      "attributes": {"resolution": "3840x2160", "refresh_rate": "60Hz", "panel": "IPS"}
+    },
+    {
+      "sku": "ACME-MECH-KEYBOARD",
+      "name": "Acme ProType Wireless Mechanical Keyboard",
+      "category_slug": "accessories",
+      "category_name": "Input Devices",
+      "description": "Hot-swappable tactile mechanical keyboard with RGB backlighting and Bluetooth 5.2.",
+      "brand": "Acme",
+      "base_price": 6499.00,
+      "compare_at_price": 7999.00,
+      "stock_quantity": 30,
+      "tags": ["keyboard", "mechanical", "wireless", "rgb"],
+      "attributes": {"switches": "Gateron Brown", "connectivity": "Tri-Mode Wireless"}
+    }
+  ]
+}
