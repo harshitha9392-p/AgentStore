@@ -1,3 +1,7 @@
 .env
 .env.save
 *.db
+.env
+.env.save
+*.db
+.venv/
