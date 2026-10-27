@@ -151,6 +151,27 @@ PYTHONPATH=. .venv/bin/pytest backend/tests -v
 | `POST` | `/api/v1/demo/scenarios/{type}` | Trigger failure & attack simulations (stockout, injection, price tampering) |
 
 ---
+## 🔧 Local Development & Setup
+
+To run this platform locally on your machine:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com
+   cd AgentStore
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Launch the FastAPI local server:**
+   ```bash
+   uvicorn main:app --reload
+   ```
+   *The server will initialize locally at `http://localhost:8000`.*
+
 
 ## 🎬 Presentation & Demonstration
 For full judging instructions, see [demo/DEMO_SCRIPT.md](demo/DEMO_SCRIPT.md) or run:
